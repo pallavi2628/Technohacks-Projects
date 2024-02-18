@@ -1,0 +1,50 @@
+import java.security.SecureRandom;
+import java.util.Scanner;
+
+public class PasswordGenerator {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to the Password Generator!");
+
+        System.out.print("Enter the length of the password: ");
+        int passwordLength = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter the complexity level (weak, medium, strong): ");
+        String complexity = scanner.nextLine().toLowerCase();
+
+        String password = generatePassword(passwordLength, complexity);
+        System.out.println("Generated Password: " + password);
+
+        scanner.close();
+    }
+
+    private static String generatePassword(int length, String complexity) {
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numbers = "0123456789";
+        String specialChars = "!@#$%^&*()-=_+[]{}|;:'\",.<>/?";
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+
+        // Choose character sets based on complexity
+        String characters = lowercase + uppercase + numbers;
+        if (complexity.equals("medium")) {
+            characters += specialChars;
+        } else if (complexity.equals("strong")) {
+            characters += uppercase + specialChars;
+        }
+
+        // Generate password
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            password.append(randomChar);
+        }
+
+        return password.toString();
+    }
+}
